@@ -38,5 +38,39 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
+
+        public void AddTag(Tag tag) // This method is called in the TagController.cs file.
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText =
+                        @"INSERT INTO Tag (Name)
+                          OUTPUT INSERTED.ID
+                          VALUES (@Name)";
+                    cmd.Parameters.AddWithValue("@Name", tag.Name);
+
+                    tag.Id = (int)cmd.ExecuteScalar();
+                }
+            }
+        }
+
+        public void DeleteTag(int tagId) // This method is called in the TagController.cs file.
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText =
+                        @"DELETE FROM Tag WHERE Id = @Id";
+                    cmd.Parameters.AddWithValue("@Id", tagId);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }
