@@ -10,5 +10,8 @@
         public DateTime CreateDateTime { get; set; } = DateTime.Now;
 
         public List<Comment> Comments { get; set; }
+
+        public Post Post { get; set; }
+        public string UserDisplayName { get; set; }
     }
 }

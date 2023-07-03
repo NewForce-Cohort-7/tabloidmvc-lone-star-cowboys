@@ -13,11 +13,13 @@ namespace TabloidMVC.Controllers
     {
         private readonly IPostRepository _postRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly ICommentRepository _commentRepository;
 
         public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository)
         {
             _postRepository = postRepository;
             _categoryRepository = categoryRepository;
+            //_commentRepository = commentRepository;
         }
 
         public IActionResult Index()
@@ -38,6 +40,8 @@ namespace TabloidMVC.Controllers
                     return NotFound();
                 }
             }
+            //post.Comments = _commentRepository.GetCommentByPostId(id);
+
             return View(post);
         }
 
