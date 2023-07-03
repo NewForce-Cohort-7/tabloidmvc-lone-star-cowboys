@@ -13,11 +13,11 @@ namespace TabloidMVC.Controllers
             _commentRepo = commentRepository;
         }
         // GET: CommentsController
-        public ActionResult Index(int postId)
+        public ActionResult Index(int id)
         {
-            List<Comment> comments = _commentRepo.GetCommentByPostId(postId);
+            List<Comment> comments = _commentRepo.GetCommentByPostId(id).OrderByDescending(x => x.CreateDateTime).ToList();
 
-            return View();
+            return View(comments);
         }
 
         // GET: CommentsController/Details/5
