@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace TabloidMVC.Models
 {
@@ -15,7 +16,7 @@ namespace TabloidMVC.Models
 
         [DisplayName("Header Image URL")]
         public string ImageLocation { get; set; }
-
+     
         public DateTime CreateDateTime { get; set; }
 
         [DisplayName("Published")]
