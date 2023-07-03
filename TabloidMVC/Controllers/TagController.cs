@@ -57,8 +57,10 @@ namespace TabloidMVC.Controllers
             _tagRepository.DeleteTag(id);
             return RedirectToAction("Index");
         }
-        
+
         // POST: TagController/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(int id, Tag tag)
         {
             try
