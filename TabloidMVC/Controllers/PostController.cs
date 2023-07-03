@@ -47,9 +47,6 @@ namespace TabloidMVC.Controllers
         }
 
 
-
-
-
         public IActionResult Details(int id)
         {
             var post = _postRepository.GetPublishedPostById(id);
@@ -93,7 +90,59 @@ namespace TabloidMVC.Controllers
             }
         }
 
-      
+      // GET: Post Edit retrieve the post you want to edit by id.
+
+public IActionResult Edit(int id)
+    {
+        Post post = _postRepository.GetPublishedPostById(id); //get the post by  post Id 
+        int userId = GetCurrentUserProfileId();//get the current user id 
+        List<Category> CategoryOptions = _categoryRepository.GetAll();
+        PostCreateViewModel vm = new PostCreateViewModel()
+        {
+            Post = new Post(),
+            CategoryOptions = CategoryOptions
+        };
+
+        if (post == null) //if there is no post
+        {
+            return NotFound();//404 error
+        }
+
+        else if (post.UserProfileId != userId) //if my owner id does not match the current userID return not found.
+        {
+            return NotFound();
+        }
+
+        {
+
+            return View(vm); //show edit view model
+
+        }
+    }
+
+    // POST: posts send the edited info back to the database
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult Edit(Post post)
+    {
+        try
+        {
+
+            _postRepository.EditPost(post);
+
+            return RedirectToAction("Index");
+        }
+        catch (Exception ex)
+        {
+            return View(post);
+        }
+    }
+
+
+}
+}
+
+
 
         }
     }
