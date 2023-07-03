@@ -96,26 +96,26 @@ public IActionResult Edit(int id)
     {
         Post post = _postRepository.GetPublishedPostById(id); //get the post by  post Id 
         int userId = GetCurrentUserProfileId();//get the current user id 
-        List<Category> CategoryOptions = _categoryRepository.GetAll();
-        PostCreateViewModel vm = new PostCreateViewModel()
-        {
-            Post = new Post(),
-            CategoryOptions = CategoryOptions
-        };
+        List<Category> Categories = _categoryRepository.GetAll();
+        PostEditViewModel evm = new PostEditViewModel()
+            {
+               Post = new Post(),
+                CategoryOptions = Categories
 
-        if (post == null) //if there is no post
-        {
-            return NotFound();//404 error
-        }
+           };
+            if (post == null) //if there is no post
+            {
+                return NotFound();//404 error
+            }
 
-        else if (post.UserProfileId != userId) //if my owner id does not match the current userID return not found.
+            if (post.UserProfileId != userId) //if my owner id does not match the current userID return not found.
         {
             return NotFound();
         }
 
         {
 
-            return View(vm); //show edit view model
+            return View(evm); //show edit view model
 
         }
     }
@@ -143,6 +143,3 @@ public IActionResult Edit(int id)
 }
 
 
-
-        }
-    }
