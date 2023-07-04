@@ -106,7 +106,7 @@ namespace TabloidMVC.Repositories
                 }
             }
         } //End of GetCommentById
-
+        //This method is mathes the id of the post with the comment's postId. This way we only retrieve the comments associated with this post and not other comments. We needed to join the post table to obtain the Title of the post. We also needed to join the UserProfile table to obtain the DisplayName for the author who created the comment.
         public List<Comment> GetCommentByPostId(int postId) 
         {
             using (SqlConnection conn = Connection) 
@@ -157,35 +157,34 @@ namespace TabloidMVC.Repositories
             }
         } //End of GetCommentByPostId
 
-        public void AddComment(Comment comment)
-        {
-            using (SqlConnection conn = Connection)
-            {
-                conn.Open();
-                using (SqlCommand cmd = conn.CreateCommand())
-                {
-                    cmd.CommandText = @"
-                INSERT INTO Dog (PostId, UserProfileId, Subject, Content, CreateDateTime)
-                OUTPUT INSERTED.ID
-                VALUES (@postId, @userProfileId, @subject, @content, createDateTime);
-            ";
+        //public void AddComment(Comment comment)
+        //{
+        //    using (SqlConnection conn = Connection)
+        //    {
+        //        conn.Open();
+        //        using (SqlCommand cmd = conn.CreateCommand())
+        //        {
+        //            cmd.CommandText = @"
+        //        INSERT INTO Dog (PostId, UserProfileId, Subject, Content, CreateDateTime)
+        //        OUTPUT INSERTED.ID
+        //        VALUES (@postId, @userProfileId, @subject, @content, createDateTime);
+        //    ";
 
-                    cmd.Parameters.AddWithValue("@postId", comment.PostId);
-                    cmd.Parameters.AddWithValue("@userProfileId", comment.UserProfileId);
-                    cmd.Parameters.AddWithValue("@subject", comment.Subject);
-                    cmd.Parameters.AddWithValue("@content", comment.Content);
-                    cmd.Parameters.AddWithValue("@createDateTime", comment.CreateDateTime);
+        //            cmd.Parameters.AddWithValue("@postId", comment.PostId);
+        //            cmd.Parameters.AddWithValue("@userProfileId", comment.UserProfileId);
+        //            cmd.Parameters.AddWithValue("@subject", comment.Subject);
+        //            cmd.Parameters.AddWithValue("@content", comment.Content);
+        //            cmd.Parameters.AddWithValue("@createDateTime", comment.CreateDateTime);
 
-                    // nullable columns
+        //            // nullable columns
 
-                    int newlyCreatedId = (int)cmd.ExecuteScalar();
+        //            int newlyCreatedId = (int)cmd.ExecuteScalar();
 
-                    comment.Id = newlyCreatedId;
+        //            comment.Id = newlyCreatedId;
 
-                }
-            }
-        }
-
+        //        }
+        //    }
+        //}
 
     }
 }

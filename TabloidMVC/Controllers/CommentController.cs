@@ -16,6 +16,7 @@ namespace TabloidMVC.Controllers
         // GET: CommentsController
         public ActionResult Index(int id)
         {
+            //This grabs the comments for the specific post as a list and orders them from most recent according to the time it was created
             List<Comment> comments = _commentRepo.GetCommentByPostId(id).OrderByDescending(x => x.CreateDateTime).ToList();
 
             return View(comments);
@@ -28,30 +29,30 @@ namespace TabloidMVC.Controllers
         //}
 
         // GET: CommentsController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
+        //public ActionResult Create()
+        //{
+        //    return View();
+        //}
 
         // POST: CommentsController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(int id, Comment comment)
-        {
-            try
-            {
-                comment.CreateDateTime = DateTime.Now;
-                comment.PostId = id;
-                comment.UserProfileId = GetCurrentUserProfileId();
-                _commentRepo.AddComment(comment);
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Create(int id, Comment comment)
+        //{
+        //    try
+        //    {
+        //        comment.CreateDateTime = DateTime.Now;
+        //        comment.PostId = id;
+        //        comment.UserProfileId = GetCurrentUserProfileId();
+        //        _commentRepo.AddComment(comment);
 
-                return RedirectToAction("Index", "Comment", new { id = id });
-            }
-            catch
-            {
-                return View(comment);
-            }
-        }
+        //        return RedirectToAction("Index", "Comment", new { id = id });
+        //    }
+        //    catch
+        //    {
+        //        return View(comment);
+        //    }
+        //}
         // GET: CommentsController/Edit/5
         public ActionResult Edit(int id)
         {
