@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using TabloidMVC.Models;
+﻿using TabloidMVC.Models;
 
-namespace TabloidMVC.Repositories
+public interface ICategoryRepository
 {
-    public interface ICategoryRepository
-    {
-        List<Category> GetAll();
-    }
+    List<Category> GetAll();
+    void Add(Category category);
+    void Update(Category category);
+    Category GetCategoryById(int id);
+}
 }

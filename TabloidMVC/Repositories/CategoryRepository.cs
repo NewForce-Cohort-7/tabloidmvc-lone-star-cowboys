@@ -1,38 +1,52 @@
 ﻿using System.Collections.Generic;
+using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using TabloidMVC.Models;
 
 namespace TabloidMVC.Repositories
 {
-    public class CategoryRepository : BaseRepository, ICategoryRepository
+    public class CategoryRepository : ICategoryRepository
     {
-        public CategoryRepository(IConfiguration config) : base(config) { }
+        private readonly IConfiguration _config;
+
+        public CategoryRepository(IConfiguration config)
+        {
+            _config = config;
+        }
+
         public List<Category> GetAll()
         {
-            using (var conn = Connection)
+            using (SqlConnection conn = new SqlConnection(_config.GetConnectionString("DefaultConnection")))
             {
                 conn.Open();
-                using (var cmd = conn.CreateCommand())
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT id, name FROM Category";
-                    var reader = cmd.ExecuteReader();
+                    cmd.CommandText = "SELECT Id, Name FROM Category";
 
-                    var categories = new List<Category>();
-
-                    while (reader.Read())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        categories.Add(new Category()
+                        List<Category> categories = new List<Category>();
+
+                        while (reader.Read())
                         {
-                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                            Name = reader.GetString(reader.GetOrdinal("name")),
-                        });
+                            Category category = new Category
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                Name = reader.GetString(reader.GetOrdinal("Name"))
+                            };
+
+                            categories.Add(category);
+                        }
+
+                        return categories;
                     }
-
-                    reader.Close();
-
-                    return categories;
                 }
             }
+        }
+
+        public void Add(Category category)
+        {
+            // Code for adding a new category to the database
         }
     }
 }
