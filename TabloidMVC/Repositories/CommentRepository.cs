@@ -157,32 +157,32 @@ namespace TabloidMVC.Repositories
             }
         } //End of GetCommentByPostId
 
-        //public void AddComment(Comment comment)
-        //{
-        //    using (SqlConnection conn = Connection)
-        //    {
-        //        conn.Open();
-        //        using (SqlCommand cmd = conn.CreateCommand())
-        //        {
-        //            cmd.CommandText = @"
-        //        INSERT INTO Comment (PostId, UserProfileId, Subject, Content, CreateDateTime)
-        //        OUTPUT INSERTED.ID
-        //        VALUES (@postId, @userProfileId, @subject, @content, @createDateTime);
-        //    ";
+        public void AddComment(Comment comment)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                INSERT INTO Comment (PostId, UserProfileId, Subject, Content, CreateDateTime)
+                OUTPUT INSERTED.ID
+                VALUES (@postId, @userProfileId, @subject, @content, @createDateTime);
+            ";
 
-        //            cmd.Parameters.AddWithValue("@postId", comment.PostId);
-        //            cmd.Parameters.AddWithValue("@userProfileId", comment.UserProfileId);
-        //            cmd.Parameters.AddWithValue("@subject", comment.Subject);
-        //            cmd.Parameters.AddWithValue("@content", comment.Content);
-        //            cmd.Parameters.AddWithValue("@createDateTime", comment.CreateDateTime.ToString("yyyy-MM-dd HH:mm:ss"));
+                    cmd.Parameters.AddWithValue("@postId", comment.PostId);
+                    cmd.Parameters.AddWithValue("@userProfileId", comment.UserProfileId);
+                    cmd.Parameters.AddWithValue("@subject", comment.Subject);
+                    cmd.Parameters.AddWithValue("@content", comment.Content);
+                    cmd.Parameters.AddWithValue("@createDateTime", comment.CreateDateTime.ToString("yyyy-MM-dd HH:mm:ss"));
 
-        //            int newlyCreatedId = (int)cmd.ExecuteScalar();
+                    int newlyCreatedId = (int)cmd.ExecuteScalar();
 
-        //            comment.Id = newlyCreatedId;
+                    comment.Id = newlyCreatedId;
 
-        //        }
-        //    }
-        //}
+                }
+            }
+        }
 
     }
 }
