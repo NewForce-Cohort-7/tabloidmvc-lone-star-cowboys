@@ -90,56 +90,45 @@ namespace TabloidMVC.Controllers
             }
         }
 
-      // GET: Post Edit retrieve the post you want to edit by id.
+        // GET: Post Edit retrieve the post you want to edit by id.
 
-public IActionResult Edit(int id)
-    {
-        Post post = _postRepository.GetPublishedPostById(id); //get the post by  post Id 
-        int userId = GetCurrentUserProfileId();//get the current user id 
-        List<Category> Categories = _categoryRepository.GetAll();
-        PostEditViewModel evm = new PostEditViewModel()
-            {
-               Post = new Post(),
-                CategoryOptions = Categories
+        public IActionResult Edit(int id)
+        {
+            int userId = GetCurrentUserProfileId();
+            Post post = _postRepository.GetUserPostById(id, userId);
 
-           };
-            if (post == null) //if there is no post
+            if (post == null)
             {
-                return NotFound();//404 error
+                return NotFound();
             }
 
-            if (post.UserProfileId != userId) //if my owner id does not match the current userID return not found.
-        {
-            return NotFound();
+            else if (post.UserProfileId != userId)
+            {
+                return NotFound();
+            }
+            else 
+            { 
+                return View(post); 
+            }
+
+
         }
 
+        //POST: Post/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, Post post)
         {
+            
+            {
+                _postRepository.EditPost(post);
 
-            return View(evm); //show edit view model
-
+                return RedirectToAction("Index");
+            }
+    
         }
+
     }
-
-    // POST: posts send the edited info back to the database
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public ActionResult Edit(Post post)
-    {
-        try
-        {
-
-            _postRepository.EditPost(post);
-
-            return RedirectToAction("Index");
-        }
-        catch (Exception ex)
-        {
-            return View(post);
-        }
-    }
-
-
-}
 }
 
 
