@@ -66,7 +66,7 @@ namespace TabloidMVC.Controllers
             {
                 return NotFound();
             }
-            return View();
+            return View(comment);
         }
 
         // POST: CommentsController/Edit/5
@@ -78,7 +78,8 @@ namespace TabloidMVC.Controllers
             {
                 _commentRepo.UpdateComment(comment);
 
-                return RedirectToAction("Index", "Comment");
+                //The user is then redirected back to the posts page. From there, to see their edit they will need to go pack into view comments and it will be there.
+                return RedirectToAction("Index", "Post");
             }
             catch (Exception ex)
             {
