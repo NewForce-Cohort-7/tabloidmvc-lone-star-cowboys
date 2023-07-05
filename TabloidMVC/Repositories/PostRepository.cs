@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Reflection.PortableExecutable;
-using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Data.SqlClient;
 using TabloidMVC.Models;
 using TabloidMVC.Utils;
 
@@ -203,7 +198,35 @@ namespace TabloidMVC.Repositories
         }
 
 
-         private Post NewPostFromReader(SqlDataReader reader)
+        public void EditPost(Post post)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                    UPDATE POST
+                    SET
+                        Title = @title,
+                        Content = @content,
+                        ImageLocation = @imageLocation
+           
+                    WHERE Id = @id";
+
+                    cmd.Parameters.AddWithValue("@id", post.Id);
+                    cmd.Parameters.AddWithValue("@title", post.Title);
+                    cmd.Parameters.AddWithValue("@content", post.Content);
+                    cmd.Parameters.AddWithValue("@imageLocation", DbUtils.ValueOrDBNull(post.ImageLocation));
+
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private Post NewPostFromReader(SqlDataReader reader)
         {
             return new Post()
             {

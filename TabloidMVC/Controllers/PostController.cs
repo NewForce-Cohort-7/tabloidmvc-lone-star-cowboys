@@ -14,11 +14,13 @@ namespace TabloidMVC.Controllers
     {
         private readonly IPostRepository _postRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly ICommentRepository _commentRepository;
 
         public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository)
         {
             _postRepository = postRepository;
             _categoryRepository = categoryRepository;
+            //_commentRepository = commentRepository;
         }
 
         private int GetCurrentUserProfileId()
@@ -47,9 +49,6 @@ namespace TabloidMVC.Controllers
         }
 
 
-
-
-
         public IActionResult Details(int id)
         {
             var post = _postRepository.GetPublishedPostById(id);
@@ -62,6 +61,8 @@ namespace TabloidMVC.Controllers
                     return NotFound();
                 }
             }
+            //post.Comments = _commentRepository.GetCommentByPostId(id);
+
             return View(post);
         }
 
@@ -93,7 +94,45 @@ namespace TabloidMVC.Controllers
             }
         }
 
-      
+        // GET: Post Edit retrieve the post you want to edit by id.
+
+        public IActionResult Edit(int id)
+        {
+            int userId = GetCurrentUserProfileId();
+            Post post = _postRepository.GetUserPostById(id, userId);
+
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            else if (post.UserProfileId != userId)
+            {
+                return NotFound();
+            }
+            else 
+            { 
+                return View(post); 
+            }
+
 
         }
+
+        //POST: Post/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, Post post)
+        {
+            
+            {
+                _postRepository.EditPost(post);
+
+                return RedirectToAction("Index");
+            }
+    
+        }
+
     }
+}
+
+
