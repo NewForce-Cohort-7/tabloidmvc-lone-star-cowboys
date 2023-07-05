@@ -225,8 +225,26 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
+        public void DeletePost(int id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
 
-        private Post NewPostFromReader(SqlDataReader reader)
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                            DELETE FROM Post
+                            WHERE Id = @id
+                        ";
+
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+            private Post NewPostFromReader(SqlDataReader reader)
         {
             return new Post()
             {
