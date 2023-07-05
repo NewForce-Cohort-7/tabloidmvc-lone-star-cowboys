@@ -49,7 +49,7 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
-        public List<Post> ViewAllUsersPosts(int UserProfileId) //function to restrict a view to a users posts. Match on userProfileId
+        public List<Post> ViewAllUsersPosts(int UserProfileId) 
         {
             using (var conn = Connection)
             {
