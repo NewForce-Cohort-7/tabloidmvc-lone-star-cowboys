@@ -29,35 +29,35 @@ namespace TabloidMVC.Controllers
         //}
 
         // GET: CommentsController/Create
-        //public ActionResult Create()
-        //{
-        //    return View();
-        //}
+        public ActionResult Create()
+        {
+            return View();
+        }
 
         // POST: CommentsController/Create
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Create(int id, Comment comment)
-        //{
-        //    try
-        //    {
-        //        //This all had to be added since the code will not create it itself, nor is it information the user would know off the top of their head to input.
-        //        //We create the DateTime and add it right then and ther
-        //        comment.CreateDateTime = DateTime.Now;
-        //        //This is where we add the Post.Id since code doesn't do it manually like a normal Id does
-        //        comment.PostId = id;
-        //        //Filling in the UserProfileId by matching it with the CurrentUserProfileId
-        //        comment.UserProfileId = GetCurrentUserProfileId();
-        //        _commentRepo.AddComment(comment);
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(int id, Comment comment)
+        {
+            try
+            {
+                //This all had to be added since the code will not create it itself, nor is it information the user would know off the top of their head to input.
+                //We create the DateTime and add it right then and ther
+                comment.CreateDateTime = DateTime.Now;
+                //This is where we add the Post.Id since code doesn't do it manually like a normal Id does
+                comment.PostId = id;
+                //Filling in the UserProfileId by matching it with the CurrentUserProfileId
+                comment.UserProfileId = GetCurrentUserProfileId();
+                _commentRepo.AddComment(comment);
 
-        //        //This return statement takes the user back to ex:/Comment/Index/2
-        //        return RedirectToAction("Index", "Comment", new { id = id });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return View(comment);
-        //    }
-        //}
+                //This return statement takes the user back to ex:/Comment/Index/2
+                return RedirectToAction("Index", "Comment", new { id = id });
+            }
+            catch (Exception ex)
+            {
+                return View(comment);
+            }
+        }
         // GET: CommentsController/Edit/5
         public ActionResult Edit(int id)
         {
