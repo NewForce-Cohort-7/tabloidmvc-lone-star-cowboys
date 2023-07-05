@@ -57,7 +57,7 @@ namespace TabloidMVC.Controllers
             Tag tag = _tagRepository.GetTagById(id);
 
             tag.Name = _tagRepository.GetTagById(id).Name; // this is a hack to get the name to show up on the delete page
-            
+
             return View(tag);
         }
 
@@ -69,6 +69,31 @@ namespace TabloidMVC.Controllers
             try
             {
                 _tagRepository.DeleteTag(id);
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return View(tag);
+            }
+        }
+
+        // GET: TagController/Edit/5
+        public IActionResult Edit(int id)
+        {
+            Tag tag = _tagRepository.GetTagById(id);
+
+            return View(tag);
+        }
+
+        // POST: TagController/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, Tag tag)
+        {
+            try
+            {
+                _tagRepository.UpdateTag(tag);
 
                 return RedirectToAction("Index");
             }
