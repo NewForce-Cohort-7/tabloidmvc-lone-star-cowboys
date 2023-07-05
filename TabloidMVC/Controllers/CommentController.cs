@@ -61,44 +61,58 @@ namespace TabloidMVC.Controllers
         // GET: CommentsController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            Comment comment = _commentRepo.GetCommentById(id);
+            if (comment == null)
+            {
+                return NotFound();
+            }
+            return View(comment);
         }
 
         // POST: CommentsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Comment comment)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _commentRepo.UpdateComment(comment);
+
+                //The user is then redirected back to the posts page. From there, to see their edit they will need to go pack into view comments and it will be there.
+                return RedirectToAction("Index", "Post");
             }
-            catch
+            catch (Exception ex)
             {
                 return View();
             }
         }
 
         // GET: CommentsController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+        //public ActionResult Delete(int id)
+        //{
+        //    Comment comment = _commentRepo.GetCommentById(id);
+        //    if (comment == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(comment);
+        //}
 
         // POST: CommentsController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Delete(int id, Comment comment)
+        //{
+        //    try
+        //    {
+        //        _commentRepo.DeleteComment(id);
+        //        return RedirectToAction("Index", "Post");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return View(comment);
+        //    }
+        //}
         private int GetCurrentUserProfileId()
         {
             string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
