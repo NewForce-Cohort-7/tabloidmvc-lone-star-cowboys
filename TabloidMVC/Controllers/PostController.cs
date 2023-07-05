@@ -49,9 +49,6 @@ namespace TabloidMVC.Controllers
         }
 
 
-
-
-
         public IActionResult Details(int id)
         {
             var post = _postRepository.GetPublishedPostById(id);
@@ -97,7 +94,45 @@ namespace TabloidMVC.Controllers
             }
         }
 
-      
+        // GET: Post Edit retrieve the post you want to edit by id.
+
+        public IActionResult Edit(int id)
+        {
+            int userId = GetCurrentUserProfileId();
+            Post post = _postRepository.GetUserPostById(id, userId);
+
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            else if (post.UserProfileId != userId)
+            {
+                return NotFound();
+            }
+            else 
+            { 
+                return View(post); 
+            }
+
 
         }
+
+        //POST: Post/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, Post post)
+        {
+            
+            {
+                _postRepository.EditPost(post);
+
+                return RedirectToAction("Index");
+            }
+    
+        }
+
     }
+}
+
+
