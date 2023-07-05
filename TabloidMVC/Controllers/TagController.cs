@@ -57,7 +57,7 @@ namespace TabloidMVC.Controllers
             Tag tag = _tagRepository.GetTagById(id);
 
             tag.Name = _tagRepository.GetTagById(id).Name; // this is a hack to get the name to show up on the delete page
-            
+
             return View(tag);
         }
 
