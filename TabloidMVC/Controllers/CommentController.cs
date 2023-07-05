@@ -88,25 +88,31 @@ namespace TabloidMVC.Controllers
         }
 
         // GET: CommentsController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+        //public ActionResult Delete(int id)
+        //{
+        //    Comment comment = _commentRepo.GetCommentById(id);
+        //    if (comment == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(comment);
+        //}
 
         // POST: CommentsController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Delete(int id, Comment comment)
+        //{
+        //    try
+        //    {
+        //        _commentRepo.DeleteComment(id);
+        //        return RedirectToAction("Index", "Post");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return View(comment);
+        //    }
+        //}
         private int GetCurrentUserProfileId()
         {
             string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
