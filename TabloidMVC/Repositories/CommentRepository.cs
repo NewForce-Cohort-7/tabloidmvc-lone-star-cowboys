@@ -165,18 +165,16 @@ namespace TabloidMVC.Repositories
         //        using (SqlCommand cmd = conn.CreateCommand())
         //        {
         //            cmd.CommandText = @"
-        //        INSERT INTO Dog (PostId, UserProfileId, Subject, Content, CreateDateTime)
+        //        INSERT INTO Comment (PostId, UserProfileId, Subject, Content, CreateDateTime)
         //        OUTPUT INSERTED.ID
-        //        VALUES (@postId, @userProfileId, @subject, @content, createDateTime);
+        //        VALUES (@postId, @userProfileId, @subject, @content, @createDateTime);
         //    ";
 
         //            cmd.Parameters.AddWithValue("@postId", comment.PostId);
         //            cmd.Parameters.AddWithValue("@userProfileId", comment.UserProfileId);
         //            cmd.Parameters.AddWithValue("@subject", comment.Subject);
         //            cmd.Parameters.AddWithValue("@content", comment.Content);
-        //            cmd.Parameters.AddWithValue("@createDateTime", comment.CreateDateTime);
-
-        //            // nullable columns
+        //            cmd.Parameters.AddWithValue("@createDateTime", comment.CreateDateTime.ToString("yyyy-MM-dd HH:mm:ss"));
 
         //            int newlyCreatedId = (int)cmd.ExecuteScalar();
 
