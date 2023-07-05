@@ -73,6 +73,26 @@ namespace TabloidMVC.Repositories
             }
         }
 
+        public void UpdateTag(Tag tag) // This method is called in the TagController.cs file.
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText =
+                        @"UPDATE Tag
+                          SET Name = @Name
+                          WHERE Id = @Id";
+
+                    cmd.Parameters.AddWithValue("@Name", tag.Name);
+                    cmd.Parameters.AddWithValue("@Id", tag.Id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         public Tag GetTagById(int id)
         {
             using (SqlConnection conn = Connection)
