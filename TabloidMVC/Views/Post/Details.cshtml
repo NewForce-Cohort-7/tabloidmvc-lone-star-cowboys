@@ -36,5 +36,10 @@
         <section class="row post__content">
             <p class="col-sm-12 mt-5">@Html.DisplayFor(model => model.Content)</p>
         </section>
+@*        These are the different links at the bottom of post details. This is the way of doing an onclick link in javascript or react, but         for c#
+*@        <a asp-action="Index" asp-controller="Comment" asp-route-id="@Model.Id">View Comments</a>
+
+        | <a asp-action="Index" asp-controller="Post">Back to Posts</a>
+        | <a asp-action="Create" asp-controller="Comment" asp-route-id="@Model.Id">Add Comment</a>
     </div>
 </div>
