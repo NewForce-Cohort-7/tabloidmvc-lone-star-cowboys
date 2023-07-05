@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using TabloidMVC.Models;
 using TabloidMVC.Repositories;
 
@@ -9,91 +8,96 @@ namespace TabloidMVC.Controllers
     public class CategoryController : Controller
     {
         private readonly ICategoryRepository _categoryRepository;
-        public CategoryController( ICategoryRepository categoryRepository)
+
+        public CategoryController(ICategoryRepository categoryRepository)
         {
-            
             _categoryRepository = categoryRepository;
         }
 
-        // GET: CategoryController
-        public ActionResult Index()
+        // GET: Category
+        public IActionResult Index()
         {
-            var categoryList = _categoryRepository.GetAll();
-            //order list in alphabetical order
-            categoryList.Sort((x, y) => string.Compare(x.Name, y.Name));
-            return View(categoryList);
+            var categories = _categoryRepository.GetAll();
+            return View(categories);
         }
 
-        // GET: CategoryController/Details/5
-        public ActionResult Details(int id)
+        // GET: Category/Details/5
+        public IActionResult Details(int id)
+        {
+            var category = _categoryRepository.GetCategoryById(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+            return View(category);
+        }
+
+        // GET: Category/Create
+        public IActionResult Create()
         {
             return View();
         }
 
-        // GET: CategoryController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: CategoryController/Create
+        // POST: Category/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Category category)
+        public IActionResult Create(Category category)
         {
-            try
+            if (ModelState.IsValid)
             {
-                
                 _categoryRepository.Add(category);
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View(category);
-            }
+            return View(category);
         }
 
-
-        // GET: CategoryController/Edit/5
-        public ActionResult Edit(int id)
+        // GET: Category/Edit/5
+        public IActionResult Edit(int id)
         {
-            return View();
+            var category = _categoryRepository.GetCategoryById(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+            return View(category);
         }
 
-        // POST: CategoryController/Edit/5
+        // POST: Category/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public IActionResult Edit(int id, Category category)
         {
-            try
+            if (id != category.Id)
             {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                _categoryRepository.Update(category);
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            return View(category);
         }
 
-        // GET: CategoryController/Delete/5
-        public ActionResult Delete(int id)
+        // GET: Category/Delete/5
+        public IActionResult Delete(int id)
         {
-            return View();
+            var category = _categoryRepository.GetCategoryById(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+            return View(category);
         }
 
-        // POST: CategoryController/Delete/5
-        [HttpPost]
+        // POST: Category/Delete/5
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public IActionResult DeleteConfirmed(int id)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            _categoryRepository.Delete(id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }
