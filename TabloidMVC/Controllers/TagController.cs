@@ -77,5 +77,30 @@ namespace TabloidMVC.Controllers
                 return View(tag);
             }
         }
+
+        // GET: TagController/Edit/5
+        public IActionResult Edit(int id)
+        {
+            Tag tag = _tagRepository.GetTagById(id);
+
+            return View(tag);
+        }
+
+        // POST: TagController/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, Tag tag)
+        {
+            try
+            {
+                _tagRepository.UpdateTag(tag);
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return View(tag);
+            }
+        }
     }
 }
