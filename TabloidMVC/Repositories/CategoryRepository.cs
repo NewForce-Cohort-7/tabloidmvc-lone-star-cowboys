@@ -1,52 +1,57 @@
 ﻿using System.Collections.Generic;
-using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using TabloidMVC.Models;
 
 namespace TabloidMVC.Repositories
 {
-    public class CategoryRepository : ICategoryRepository
+    public class CategoryRepository : BaseRepository, ICategoryRepository
     {
-        private readonly IConfiguration _config;
-
-        public CategoryRepository(IConfiguration config)
-        {
-            _config = config;
-        }
-
+        public CategoryRepository(IConfiguration config) : base(config) { }
         public List<Category> GetAll()
         {
-            using (SqlConnection conn = new SqlConnection(_config.GetConnectionString("DefaultConnection")))
+            using (var conn = Connection)
             {
                 conn.Open();
-                using (SqlCommand cmd = conn.CreateCommand())
+                using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT Id, Name FROM Category";
+                    cmd.CommandText = "SELECT id, name FROM Category";
+                    var reader = cmd.ExecuteReader();
 
-                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    var categories = new List<Category>();
+
+                    while (reader.Read())
                     {
-                        List<Category> categories = new List<Category>();
-
-                        while (reader.Read())
+                        categories.Add(new Category()
                         {
-                            Category category = new Category
-                            {
-                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                                Name = reader.GetString(reader.GetOrdinal("Name"))
-                            };
-
-                            categories.Add(category);
-                        }
-
-                        return categories;
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Name = reader.GetString(reader.GetOrdinal("name")),
+                        });
                     }
+
+                    reader.Close();
+
+                    return categories;
                 }
             }
         }
 
         public void Add(Category category)
         {
-            // Code for adding a new category to the database
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                INSERT INTO Category (Name)
+                OUTPUT INSERTED.ID
+                VALUES (@Name)";
+                    cmd.Parameters.AddWithValue("@Name", category.Name);
+
+                    category.Id = (int)cmd.ExecuteScalar();
+                }
+            }
         }
+
     }
 }
